@@ -11,8 +11,9 @@ static VALUE foreach(VALUE self, VALUE filename) {
   
   char line[MAX_LENGTH];
   char *token;
-  VALUE ary = rb_ary_new();
   int idx;
+
+  VALUE ary = rb_ary_new();
   
   while (fgets(line, sizeof(line), file) != NULL) {
     token = strtok(line, DELIMITERS);
@@ -23,7 +24,11 @@ static VALUE foreach(VALUE self, VALUE filename) {
       idx ++;
       token = strtok(NULL, DELIMITERS);
     }
+    
+    OBJ_FREEZE(ary);
     rb_yield(ary);
+    FL_UNSET((ary), FL_FREEZE);
+    
   }
 
   return Qnil;
