@@ -11,7 +11,7 @@ static VALUE foreach(VALUE self, VALUE filename) {
   
   char line[MAX_LENGTH];
   char *token;
-  VALUE parsed = rb_ary_new2(2);
+  VALUE parsed = rb_ary_new();
   
   while (fgets(line, sizeof(line), file) != NULL) {
     token = strtok(line, DELIMITERS);
