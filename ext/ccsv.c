@@ -4,22 +4,26 @@
 static VALUE rb_cC;
 
 static VALUE foreach(VALUE self, VALUE filename) {
+
   FILE *file = fopen(StringValueCStr(filename), "r");
+  if (file == NULL)
+    rb_raise(rb_eRuntimeError, "File not found");
   
   char line[MAX_LENGTH];
   char *token;
-  VALUE parsed;
+  VALUE parsed = rb_ary_new2(2);
+  ID clear = rb_intern("clear");
   
   int i, j;
   while (fgets(line, sizeof(line), file) != NULL) {
     token = strtok(line, DELIMITERS);
-    parsed = rb_ary_new2(2);
+    rb_funcall(parsed, clear, 0);
     
     while (token != NULL) {
       rb_ary_push(parsed, rb_str_new2(token));
       token = strtok(NULL, DELIMITERS);
     }
-    rb_yield_splat(parsed);
+    rb_yield(parsed);
   }
 
   return Qnil;
