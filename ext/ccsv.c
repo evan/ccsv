@@ -12,15 +12,15 @@ static VALUE foreach(VALUE self, VALUE filename) {
   char line[MAX_LENGTH];
   char *token;
   VALUE ary = rb_ary_new();
-  int offset;
+  int idx;
   
   while (fgets(line, sizeof(line), file) != NULL) {
     token = strtok(line, DELIMITERS);
-    offset = 0;
+    idx = 0;
     
     while (token != NULL) {
-      rb_ary_store(ary, offset, rb_str_new(token, strlen(token)));
-      offset ++;
+      rb_ary_store(ary, idx, rb_str_new(token, strlen(token)));
+      idx ++;
       token = strtok(NULL, DELIMITERS);
     }
     rb_yield(ary);
