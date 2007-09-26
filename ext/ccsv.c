@@ -18,7 +18,7 @@ static VALUE foreach(VALUE self, VALUE filename) {
     rb_ary_clear(parsed);
     
     while (token != NULL) {
-      rb_ary_push(parsed, rb_str_new2(token));
+      rb_ary_push(parsed, rb_str_new(token, strlen(token)));
       token = strtok(NULL, DELIMITERS);
     }
     rb_yield(parsed);
