@@ -11,17 +11,19 @@ static VALUE foreach(VALUE self, VALUE filename) {
   
   char line[MAX_LENGTH];
   char *token;
-  VALUE parsed = rb_ary_new();
+  VALUE ary = rb_ary_new();
+  int offset;
   
   while (fgets(line, sizeof(line), file) != NULL) {
     token = strtok(line, DELIMITERS);
-    rb_ary_clear(parsed);
+    offset = 0;
     
     while (token != NULL) {
-      rb_ary_push(parsed, rb_str_new(token, strlen(token)));
+      rb_ary_store(ary, offset, rb_str_new(token, strlen(token)));
+      offset ++;
       token = strtok(NULL, DELIMITERS);
     }
-    rb_yield(parsed);
+    rb_yield(ary);
   }
 
   return Qnil;
