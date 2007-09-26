@@ -1,7 +1,13 @@
 
 require 'test/unit'
 require 'ccsv'
+
+# Yeah, I know.
 require 'csv'
+require 'rubygems'
+require 'fastercsv'
+require '/Users/eweaver/tmp/lightcsv-0.2/lib/lightcsv'
+require 'benchmark'
 
 class TestCcsv < Test::Unit::TestCase
   
@@ -30,11 +36,13 @@ class TestCcsv < Test::Unit::TestCase
   end
   
   def test_speed
-    start = Time.now
-    Ccsv.foreach(@dir + "data.csv") do |values|     
+    [Ccsv, LightCsv, FasterCSV, CSV].each do |klass|
+      Benchmark.bm(1) do |x|
+        x.report(klass.name) do 
+          klass.foreach(@dir + "data.csv") do |values| end
+        end
+      end
     end
-    dur = Time.now - start
-    puts "\n#{dur} seconds\n"
   end
   
 end
