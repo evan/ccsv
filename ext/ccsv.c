@@ -12,12 +12,11 @@ static VALUE foreach(VALUE self, VALUE filename) {
   char line[MAX_LENGTH];
   char *token;
   VALUE parsed = rb_ary_new2(2);
-  ID clear = rb_intern("clear");
   
   int i, j;
   while (fgets(line, sizeof(line), file) != NULL) {
     token = strtok(line, DELIMITERS);
-    rb_funcall(parsed, clear, 0);
+    rb_ary_clear(parsed);
     
     while (token != NULL) {
       rb_ary_push(parsed, rb_str_new2(token));
