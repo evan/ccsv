@@ -1,4 +1,6 @@
 
+v0.1. Nil out the array after each pass.
+
 v0.0.2. Avoid a couple more dispatches.
 
 v0.0.1. First version.

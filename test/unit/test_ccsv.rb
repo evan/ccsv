@@ -49,7 +49,7 @@ class TestCcsv < Test::Unit::TestCase
   end
   
   def test_speed
-    [Ccsv, CSVScan, LightCsv, FasterCSV, CSV].each do |klass| 
+    [Ccsv, FasterCSV, CSV].each do |klass| # CSVScan, LightCsv, 
       Benchmark.bm do |x|
         x.report(klass.name) do 
           klass.foreach(@dir + "data.csv") do |values| end

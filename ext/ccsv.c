@@ -28,6 +28,10 @@ static VALUE foreach(VALUE self, VALUE filename) {
     OBJ_FREEZE(ary);
     rb_yield(ary);
     FL_UNSET((ary), FL_FREEZE);
+        
+    for(idx = 0; idx < RARRAY_LEN(ary); idx ++) {
+      rb_ary_store(ary, idx, Qnil);
+    }    
     
   }
 
