@@ -13,9 +13,10 @@ static VALUE foreach(VALUE self, VALUE filename) {
   char *token;
   int idx;
 
-  VALUE ary = rb_ary_new();
+  VALUE ary;
   
   while (fgets(line, sizeof(line), file) != NULL) {
+    ary = rb_ary_new();
     token = strtok(line, DELIMITERS);
     idx = 0;
     
@@ -25,13 +26,13 @@ static VALUE foreach(VALUE self, VALUE filename) {
       token = strtok(NULL, DELIMITERS);
     }
     
-    OBJ_FREEZE(ary);
+    /* OBJ_FREEZE(ary); */
     rb_yield(ary);
-    FL_UNSET((ary), FL_FREEZE);
+    /* FL_UNSET((ary), FL_FREEZE); */
         
-    for(idx = 0; idx < RARRAY_LEN(ary); idx ++) {
+    /* for(idx = 0; idx < RARRAY_LEN(ary); idx ++) {
       rb_ary_store(ary, idx, Qnil);
-    }    
+    } */  
     
   }
 
