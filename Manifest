@@ -5,4 +5,6 @@ ext/extconf.rb
 LICENSE
 Manifest
 README
+test/data.csv
+test/data_small.csv
 test/unit/test_ccsv.rb
