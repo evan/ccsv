@@ -35,7 +35,7 @@ static VALUE foreach(VALUE self, VALUE filename) {
     
   }
 
-  close(file);
+  fclose(file);
 
   return Qnil;
 }
