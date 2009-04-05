@@ -1,4 +1,3 @@
-
 #include "ccsv.h"
 
 static VALUE rb_cC;
@@ -35,6 +34,8 @@ static VALUE foreach(VALUE self, VALUE filename) {
     } */  
     
   }
+
+  close(file);
 
   return Qnil;
 }
