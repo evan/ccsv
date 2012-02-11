@@ -1,10 +1,12 @@
 CHANGELOG
+LICENSE
+Manifest
+README.rdoc
+Rakefile
+ccsv.gemspec
 ext/ccsv.c
 ext/ccsv.h
 ext/extconf.rb
-LICENSE
-Manifest
-README
 test/data.csv
 test/data_small.csv
 test/unit/test_ccsv.rb
