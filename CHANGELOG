@@ -1,3 +1,4 @@
+v0.1.1 remove env.h and node.h for compilation for ruby 1.9.3
 
 v0.1. Nil out the array after each pass; don't freeze the array anymore.
 

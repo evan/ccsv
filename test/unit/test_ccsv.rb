@@ -18,23 +18,23 @@ begin
       end
     end
   end
-  
+
 rescue LoadError
 end
 
 class TestCcsv < Test::Unit::TestCase
-  
+
   def setup
     @dir = "#{File.dirname(__FILE__)}/../"
   end
-  
+
   def test_should_raise
     assert_raises(RuntimeError) do
       Ccsv.foreach('fdssfd') do
       end
     end
   end
-  
+
   def test_accuracy
     ccsv = []
     file = @dir + "data_small.csv"
@@ -44,18 +44,18 @@ class TestCcsv < Test::Unit::TestCase
     csv = []
     CSV.foreach(file) do |values|
       csv << values
-    end    
+    end
     assert_equal csv, ccsv
   end
-  
+
   def test_speed
-    [Ccsv, FasterCSV, CSV].each do |klass| # CSVScan, LightCsv, 
+    [Ccsv, FasterCSV, CSV].each do |klass| # CSVScan, LightCsv,
       Benchmark.bm do |x|
-        x.report(klass.name) do 
+        x.report(klass.name) do
           klass.foreach(@dir + "data.csv") do |values| end
         end
       end
     end
   end
-  
+
 end
