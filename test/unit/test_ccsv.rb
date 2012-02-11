@@ -7,7 +7,6 @@ require 'benchmark'
 begin
   require 'csv'
   require 'rubygems'
-  require 'fastercsv'
   require 'lightcsv'
   require 'csvscan'
 
@@ -49,8 +48,8 @@ class TestCcsv < Test::Unit::TestCase
   end
 
   def test_speed
-    [Ccsv, FasterCSV, CSV].each do |klass| # CSVScan, LightCsv,
-      Benchmark.bm do |x|
+    Benchmark.bm(5) do |x|
+      [Ccsv, CSV].each do |klass| # CSVScan, LightCsv,
         x.report(klass.name) do
           klass.foreach(@dir + "data.csv") do |values| end
         end
