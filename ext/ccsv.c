@@ -8,13 +8,14 @@ static VALUE foreach(VALUE self, VALUE filename) {
   if (file == NULL)
     rb_raise(rb_eRuntimeError, "File not found");
 
-  char line[MAX_LENGTH];
+  char *line = NULL;
+  size_t len = 0;
   char *token;
   int idx;
 
   VALUE ary;
-
-  while (fgets(line, sizeof(line), file) != NULL) {
+  
+  while (getline(&line, &len, file) != -1) {
     ary = rb_ary_new();
     token = strtok(line, DELIMITERS);
     idx = 0;
