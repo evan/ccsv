@@ -22,5 +22,6 @@ A pure-C CSV parser.
 
 == License
 
+Copyright 2012 Sergey Zhumatiy
 Copyright 2007-2012 Cloudburst, LLC. Licensed under the AFL 3. See the included LICENSE file.
 

@@ -1,4 +1,4 @@
 
 require 'mkmf'
-dir_config('ccsv')
-create_makefile('ccsv')
+dir_config('hopcsv')
+create_makefile('hopcsv')

@@ -1,3 +1,9 @@
+v0.4.1. Fixed passing nil as range
+
+v0.4.0. Added Hopcsv::MIN and Hopcsv::MAX
+
+v0.3.0. Hopcsv now. Added filtering by integer fields (zhum)
+
 v0.2.0. Allow custom delimiter, check for delimiter backslashing (zhum).
 
 v0.1.2. Allow lines of any length (crossman).
