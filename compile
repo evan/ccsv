@@ -2,3 +2,4 @@
 
 bundle install
 rake build
+rake
