@@ -1,3 +1,5 @@
+v0.4.2. Fixed ranges list processig
+
 v0.4.1. Fixed passing nil as range
 
 v0.4.0. Added Hopcsv::MIN and Hopcsv::MAX
