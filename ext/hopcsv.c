@@ -16,7 +16,7 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
   char *line = NULL;
   size_t len = 0;
   char *token,*start,*nobackslash,*t2, *str;
-  int idx,count,pairs_count,searchfield, flag, i, array_length;
+  int idx,count,pairs_count,searchfield,flag,i,array_length,range_i,len2;
   long check;
   FILE *file;
   ID min_method, max_method;
@@ -63,28 +63,34 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
   min_method = rb_intern("min");
   max_method = rb_intern("max");
   /*------------test_id    = rb_intern("class");*/
+  range_i=0;
   for(idx=2;idx<array_length;++idx){
-    VALUE e=rb_ary_entry(rb_ary_entry(rest_args,idx),0);
-    if(idx>MAX_INTERVALS+2)
-      rb_raise(rb_eRuntimeError, "Too much ranges passed");
-    if(TYPE(e) == T_NIL){
-      pairs[idx-2].low=LONG_MIN;
-      pairs[idx-2].high=LONG_MAX;
+    min_val=rb_funcall(rb_ary_entry(rest_args,idx),rb_intern("length"), 0);
+    len2=NUM2INT(min_val);
+    for(i=0;i<len2;++i){
+      VALUE e=rb_ary_entry(rb_ary_entry(rest_args,idx),i);
+      if(range_i>MAX_INTERVALS)
+        rb_raise(rb_eRuntimeError, "Too much ranges passed");
+      if(TYPE(e) == T_NIL){
+        pairs[range_i].low=LONG_MIN;
+        pairs[range_i].high=LONG_MAX;
 
-      continue; /* just skip nil */
+        continue; /* just skip nil */
+      }
+      if (! (rb_respond_to(e, min_method) & rb_respond_to(e, max_method)))
+        rb_raise(rb_eRuntimeError, "Not range passed to Hopcsv.foreach");
+
+      min_val=rb_funcall(e, min_method, 0);
+      max_val=rb_funcall(e, max_method, 0);
+  /*    rb_warn("!\n");*/
+      pairs[range_i].low=NUM2LONG(min_val);
+      /*rb_warn("2\n");*/
+      pairs[range_i].high=NUM2LONG(max_val);
+      /*rb_warn("RANGE: %ld .. %ld (%d)\n",(long)pairs[range_i].low,(long)pairs[range_i].high,(int)(range_i));*/
+      range_i++;
     }
-    if (! (rb_respond_to(e, min_method) & rb_respond_to(e, max_method)))
-      rb_raise(rb_eRuntimeError, "Not range passed to Hopcsv.foreach");
-
-    min_val=rb_funcall(e, min_method, 0);
-    max_val=rb_funcall(e, max_method, 0);
-/*    rb_warn("!\n");*/
-    pairs[idx-2].low=NUM2LONG(min_val);
-    /*rb_warn("2\n");*/
-    pairs[idx-2].high=NUM2LONG(max_val);
-    /*rb_warn("RANGE: %ld .. %ld (%d)\n",(long)pairs[idx-2].low,(long)pairs[idx-2].high,(int)(idx-2));*/
   }
-  pairs_count=idx-2;
+  pairs_count=range_i;
 
   while (getline(&line, &len, file) != -1) {
     /* chomp! */
@@ -117,7 +123,9 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
         /* do check! */
         sscanf(start,"%ld",&check);
         for(i=0;i<pairs_count;++i){
+          /*rb_warn("check %ld: [%ld .. %ld]",check,pairs[i].low,pairs[i].high);*/
           if(pairs[i].low<check && pairs[i].high>check){
+            /*rb_warn("check passed");*/
             flag=1; /* yahooo! */
             break;
           }
@@ -129,7 +137,7 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
         break;
 
       rb_ary_store(ary, idx, rb_str_new(start, token-start));
-      idx ++;
+      idx++;
       nobackslash=start=token+1;
       while(token=index(nobackslash, DELIM)){
         count=0;
