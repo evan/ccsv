@@ -47,6 +47,51 @@ class TestCcsv < Test::Unit::TestCase
     assert_equal csv, ccsv
   end
 
+def test_comma
+    ccsv = []
+    file = @dir + "data_small.csv"
+    Ccsv.foreach(file) do |values|
+      ccsv << values.dup
+    end
+    ctsv = []
+    tfile = @dir + "data_small.csv"
+    Ccsv.foreach(file,",") do |values|
+      ctsv << values.dup
+    end
+    assert_equal ctsv, ccsv
+  end
+
+  def test_bar
+    ccsv = []
+    file = @dir + "data_small.csv"
+    Ccsv.foreach(file,",") do |values|
+      ccsv << values.dup
+    end
+    ctsv = []
+    tfile = @dir + "data_bar.csv"
+    Ccsv.foreach(tfile,"|") do |values|
+      ctsv << values.dup
+    end
+    assert_equal ctsv, ccsv
+  end
+
+  def test_tab
+    ccsv = []
+    file = @dir + "data_tab.csv"
+    Ccsv.foreach(file,"\t") do |values|
+      ccsv << values.dup
+    end
+    ctsv = []
+    tfile = @dir + "data_bar2.csv"
+    Ccsv.foreach(tfile,"|") do |values|
+      ctsv << values.dup
+    end
+    assert_equal ctsv, ccsv
+
+    # comma embeded in the field - shouldn't split on this.
+    assert_equal '159,8130', ctsv[ctsv.length-1][1]
+  end
+
   def test_speed
     Benchmark.bm(5) do |x|
       [Ccsv, CSV].each do |klass| # CSVScan, LightCsv,

@@ -7,5 +7,9 @@ ext/ccsv.c
 ext/ccsv.h
 ext/extconf.rb
 test/data.csv
+test/data_bar.csv
+test/data_bar2.csv
 test/data_small.csv
+test/data_small.tab
+test/data_tab.csv
 test/unit/test_ccsv.rb
