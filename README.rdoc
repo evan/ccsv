@@ -16,6 +16,12 @@ A pure-C CSV parser.
     # Do something with the line array
   end
 
+  # Or split on tabs, etc.
+  Ccsv.foreach("data.tab","\t") do |line|
+    # Do something with the line array
+  end
+
+
 == License
 
 Copyright 2007-2012 Cloudburst, LLC. Licensed under the AFL 3. See the included LICENSE file.
