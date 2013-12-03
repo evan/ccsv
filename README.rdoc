@@ -1,22 +1,42 @@
 
-Ccsv
+Hopcsv
 
 A pure-C CSV parser.
 
 == Installation
 
-  gem install ccsv
+  gem install hopcsv
 
 == Usage
 
   require 'rubygems'
-  require 'ccsv'
+  require 'hopcsv'
 
-  Ccsv.foreach("data.csv") do |line|
+  Hopcsv.foreach("data.csv") do |line|
     # Do something with the line array
   end
 
+  Hopcsv.foreach("/etc/passwd",":") do |line|
+    puts line[0]
+  end
+
+== Advanced usage
+
+Get users from passwd file, with UIDs between 1000 and 1010 and between 2000 and 2010.
+Works with numbers only!
+Third argument is column index, then one or more intervals.
+
+  Hopcsv.foreach("/etc/passwd",":",2,[1000..1010],[2000..2010]) do |line|
+    puts line[0]
+  end
+
+== Contacts
+
+  Forks, pull-requests and other contacts via guthub: https://github.com/zhum/hopcsv
+
 == License
+
+Copyright 2012 Sergey Zhumatiy
 
 Copyright 2007-2012 Cloudburst, LLC. Licensed under the AFL 3. See the included LICENSE file.
 
