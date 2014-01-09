@@ -1,7 +1,7 @@
 require 'echoe'
 
 Echoe.new("ccsv") do |p|
-  p.author = "Evan Weaver"
+  p.author = ["Evan Weaver","Sergey Zhumatiy"]
   p.project = "evan"
   p.summary = "A pure-C CSV parser."
   p.url = "http://github.com/evan/ccsv/"

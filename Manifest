@@ -1,8 +1,11 @@
 CHANGELOG
+Gemfile
+Gemfile.lock
 LICENSE
 Manifest
 README.rdoc
 Rakefile
+compile
 ext/ccsv.c
 ext/ccsv.h
 ext/extconf.rb

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+bundle install
+rake build
+rake
