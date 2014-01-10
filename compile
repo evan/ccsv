@@ -1,5 +1,7 @@
 #!/bin/sh
 
 bundle install
+rake compile
 rake build
-rake
+rake gem
+rake test
