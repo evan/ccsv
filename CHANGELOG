@@ -1,3 +1,5 @@
+v1.0.1 Tests moved to minitest (zhum).
+
 v1.0.0 Allow custom delimiter and integer range filtration (zhum).
 
 v0.1.2. Allow lines of any length (crossman).

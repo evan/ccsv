@@ -9,6 +9,9 @@ compile
 ext/ccsv.c
 ext/ccsv.h
 ext/extconf.rb
-test/data.csv
-test/data_small.csv
-test/unit/test_ccsv.rb
+spec/ccsv_bench_spec.rb
+spec/ccsv_spec.rb
+test.old/data.csv
+test.old/data_small.csv
+test.old/unit/ccsv_test.rb
+x_spec.rb
