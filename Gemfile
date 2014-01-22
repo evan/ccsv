@@ -4,4 +4,5 @@
 
 group :development do
 	gem 'echoe'
+	gem 'minitest'
 end
