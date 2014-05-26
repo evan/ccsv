@@ -5,8 +5,10 @@ LICENSE
 Manifest
 README.rdoc
 Rakefile
+ccsv.gemspec
 compile
 ext/ccsv.c
 ext/ccsv.h
 ext/extconf.rb
+spec/bench_spec.rb
 spec/ccsv_spec.rb

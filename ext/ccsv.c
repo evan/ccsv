@@ -56,12 +56,12 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
     searchfield=-1;
   }
 
-  min_val=rb_funcall(rest_args,rb_intern("length"), 0);
-  array_length=NUM2INT(min_val);
+  array_length_method=rb_funcall(rest_args,rb_intern("length"), 0);
+  array_length=NUM2INT(array_length_method);
   /*rb_warn("Length=%d",array_length);*/
 
-  min_method = rb_intern("min");
-  max_method = rb_intern("max");
+  min_method = rb_intern("first");
+  max_method = rb_intern("last");
   /*------------test_id    = rb_intern("class");*/
   range_i=0;
   for(idx=2;idx<array_length;++idx){
@@ -82,7 +82,7 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
 
       min_val=rb_funcall(e, min_method, 0);
       max_val=rb_funcall(e, max_method, 0);
-  /*    rb_warn("!\n");*/
+      /*rb_warn("!\n");*/
       pairs[range_i].low=NUM2LONG(min_val);
       /*rb_warn("2\n");*/
       pairs[range_i].high=NUM2LONG(max_val);
@@ -102,7 +102,7 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
     start=line;
     nobackslash=line;
     while(token=index(nobackslash, DELIM)){
-/*      rb_warning("5\n");*/
+      /*rb_warning("5\n");*/
       count=0;
       t2=token-1;
       while((t2>=line) && (*t2=='\\'))
