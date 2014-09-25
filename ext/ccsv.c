@@ -12,7 +12,7 @@ struct pair_st {
 #define MAX_INTERVALS 1024
 
 static VALUE foreach(int argc, VALUE* argv, VALUE self) {
-  char DELIM=DEF_DELIM;
+  char *DELIM=DEF_DELIM;
   char *line = NULL;
   size_t len = 0;
   char *token,*start,*nobackslash,*t2, *str;
@@ -44,8 +44,7 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
 
   if (argc >1 ) { /* delimiter */
     tmp_value=rb_ary_entry(rest_args,0);
-    str=StringValueCStr(tmp_value);
-    DELIM=str[0];
+    DELIM=StringValueCStr(tmp_value);;
   }
 
   if (argc >2 ) { /* search index */
@@ -101,7 +100,7 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
     ary = rb_ary_new();
     start=line;
     nobackslash=line;
-    while(token=index(nobackslash, DELIM)){
+    while(token=strstr(nobackslash, DELIM)){
       /*rb_warning("5\n");*/
       count=0;
       t2=token-1;
@@ -138,14 +137,14 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
 
       rb_ary_store(ary, idx, rb_str_new(start, token-start));
       idx++;
-      nobackslash=start=token+1;
-      while(token=index(nobackslash, DELIM)){
+      nobackslash=start=token+strlen(DELIM);
+      while(token=strstr(nobackslash, DELIM)){
         count=0;
         t2=token-1;
         while((t2>=line) && (*t2=='\\'))
           {++count;--t2;}
         if(count%2 ==1){ /* backslashed! skip */
-          nobackslash=token;
+          nobackslash=token+strlen(DELIM);
           continue;
         }
         break;
