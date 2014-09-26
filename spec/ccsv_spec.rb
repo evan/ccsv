@@ -51,6 +51,14 @@ describe Ccsv do
 		@csv[15000].must_equal(['15001','30002','15004'])
 	end
 
+	it 'reads csv with a multi-character delimiter' do
+		create_csv('|^|')
+		Ccsv.foreach(TEST_CSV,'|^|') do |v|
+			@csv << v
+		end
+		@csv[15000].must_equal(['15001','30002','15004'])
+	end
+
 	it 'raises error' do
 		proc {
 			Ccsv.foreach('/non-existent-file') do |x| end
@@ -66,4 +74,16 @@ describe Ccsv do
 		@csv.size.must_equal(999)
 	end
 
+  it 'reads a line with an escaped delimiter' do
+    open(TEST_CSV, 'w') do |file|
+      file.puts "field1,field2,field3,field\\,with comma,field5"
+    end
+    Ccsv.foreach(TEST_CSV, ',') do |v|
+      v[0].must_equal('field1')
+      v[1].must_equal('field2')
+      v[2].must_equal('field3')
+      v[3].must_equal('field\\,with comma')
+      v[4].must_equal('field5')
+    end
+  end
 end
