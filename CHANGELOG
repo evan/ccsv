@@ -1,3 +1,5 @@
+v1.1.0 Added ability to have a multi-character delimiter. Also fixed escaped delimiter support. Included new tests for both cases (abates@omeganetserv.com)
+
 v1.0.4 Range methods min/max replaced by first/last for stable work (zhum)
 
 v1.0.3 Benchmarks now in spec-style (zhum).

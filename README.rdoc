@@ -37,6 +37,6 @@ Third argument is column index, used for filtering, then one or more intervals.
 
 == License
 
-Copyright 2012-2013 Sergey Zhumatiy
+Copyright 2012-2014 Sergey Zhumatiy
 
 Copyright 2007-2012 Cloudburst, LLC. Licensed under the AFL 3. See the included LICENSE file.
