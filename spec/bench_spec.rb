@@ -6,6 +6,7 @@ require 'minitest/benchmark'
 require 'ccsv'
 require 'csv'
 
+__END__
 TEST_CSV_FILES={
 	100=>"/tmp/test1.csv",
 	10000=>"/tmp/test2.csv",

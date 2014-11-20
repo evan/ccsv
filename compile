@@ -4,4 +4,4 @@ bundle install
 rake compile
 rake build
 rake gem
-rake test
+#rake test

@@ -14,10 +14,12 @@ struct pair_st {
 static VALUE foreach(int argc, VALUE* argv, VALUE self) {
   char *DELIM=DEF_DELIM;
   char *line = NULL;
-  size_t len = 0;
-  char *token,*start,*nobackslash,*t2, *str;
-  int idx,count,pairs_count,searchfield,flag,i,array_length,range_i,len2;
+  char *line2 =NULL, *new_line=NULL;
+  size_t len = 0, len2=0, i, pairs_count;
+  char *token,*start,*nobackslash,*t2;
+  size_t idx,count,searchfield,flag,array_length,range_i;
   long check;
+  int  was_read;
   FILE *file;
   ID min_method, max_method;
   VALUE min_val, max_val;
@@ -57,7 +59,6 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
 
   array_length_method=rb_funcall(rest_args,rb_intern("length"), 0);
   array_length=NUM2INT(array_length_method);
-  /*rb_warn("Length=%d",array_length);*/
 
   min_method = rb_intern("first");
   max_method = rb_intern("last");
@@ -81,42 +82,95 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
 
       min_val=rb_funcall(e, min_method, 0);
       max_val=rb_funcall(e, max_method, 0);
-      /*rb_warn("!\n");*/
       pairs[range_i].low=NUM2LONG(min_val);
-      /*rb_warn("2\n");*/
       pairs[range_i].high=NUM2LONG(max_val);
-      /*rb_warn("RANGE: %ld .. %ld (%d)\n",(long)pairs[range_i].low,(long)pairs[range_i].high,(int)(range_i));*/
       range_i++;
     }
   }
   pairs_count=range_i;
 
-  while (getline(&line, &len, file) != -1) {
-    /* chomp! */
-    if(token=index(line,EOL)){
-      *token='\0';
-    }
-    /*rb_warning("4\n");*/
-    ary = rb_ary_new();
-    start=line;
-    nobackslash=line;
-    while(token=strstr(nobackslash, DELIM)){
-      /*rb_warning("5\n");*/
+  /* main loop lines reading */
+
+  while ((was_read=getline(&line, &len, file)) != -1) {
+
+    if(was_read<1)
+      continue;
+
+    len=was_read-1;
+    /* try to join escaped lines */
+    for(;;) {
+      /* check for backslashed newline */
+      if(line[len]!=EOL)
+        break;
+      if(line[len]==CR){
+        len-=1;
+      }
+      //rb_warn("NONLAST (%c,%c)",line[len],line[len]);
       count=0;
-      t2=token-1;
+      t2=line+len-1;
       while((t2>=line) && (*t2=='\\'))
         {++count;--t2;}
       if(count%2 ==1){ /* backslashed! skip */
-        nobackslash=token;
-        continue;
+        /* get another line... */
+        line2=NULL;
+        len2=0;
+        if((was_read=getline(&line2, &len2, file)) != -1) {
+          len2=was_read;
+          if(new_line)
+            free(new_line); //!!!!
+          new_line=malloc(len+len2+1);
+          strcpy(new_line,line);
+          new_line[len-1]='\n';
+          strcpy(new_line+len,line2);
+          line=new_line;
+          //nobackslash=len+1;
+          start=new_line;
+          len+=len2-1;
+          nobackslash=start;
+          free(line);
+          free(line2);
+          continue;
+        }
       }
       break;
     }
+    /* chomp! */
+    if(line[len]==EOL){
+      if(line[len-1]==CR)
+        len-=1;
+      line[len]='\0';
+    }
+    /* skip empty line */
+    if(len<2)
+      continue;
+
+    ary = rb_ary_new();
+    start=line;
+    nobackslash=line;
+    
     idx = 0;
     flag=1;
 
-    while (token != NULL) {
-      *token='\0';
+    while (nobackslash != NULL) {
+
+      /* get full field */
+      while(token=strstr(nobackslash, DELIM)){
+        count=0;
+        t2=token-1;
+        while((t2>=line) && (*t2=='\\'))
+          {++count;--t2;}
+        if(count%2 ==1){ /* backslashed! skip */
+          nobackslash=token;
+          continue;
+        }
+        break;
+      }
+
+      if(token)
+        *token='\0';
+      else
+        token=start+strlen(start);
+
       if(searchfield==idx){
         flag=0;
         /* do check! */
@@ -149,6 +203,7 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
         }
         break;
       }
+      nobackslash=token;
     }
     if(flag==0)
       continue;
@@ -165,8 +220,8 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
     } */
 
   }
-
   fclose(file);
+  free(line);
 
   return Qnil;
 }
@@ -179,3 +234,4 @@ Init_ccsv()
   rb_define_const(rb_cC, "MAX", LONG2NUM(LONG_MAX));
   rb_define_const(rb_cC, "MIN", LONG2NUM(LONG_MIN));
 }
+

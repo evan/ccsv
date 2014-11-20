@@ -6,6 +6,7 @@ require 'echoe'
 Echoe.new("ccsv") do |p|
   p.author = ["Evan Weaver","Sergey Zhumatiy"]
   p.project = "evan"
+  p.licenses = ["AFL"]
   p.email = "serg@parallel.ru"
   p.summary = "A pure-C CSV parser."
   p.description = "Ruby CSV parser gem, written in pure C."
