@@ -19,7 +19,7 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
   char *token,*start,*nobackslash,*t2;
   size_t idx,count,searchfield,flag,array_length,range_i;
   long check;
-  int  was_read;
+  int  was_read, backslashed;
   FILE *file;
   ID min_method, max_method;
   VALUE min_val, max_val;
@@ -96,6 +96,7 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
     if(was_read<1)
       continue;
 
+    backslashed = 0;
     len=was_read-1;
     /* try to join escaped lines */
     for(;;) {
@@ -127,6 +128,7 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
           start=new_line;
           len+=len2-1;
           nobackslash=start;
+          backslashed = 1;
           free(line);
           free(line2);
           continue;
@@ -147,7 +149,7 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
     ary = rb_ary_new();
     start=line;
     nobackslash=line;
-    
+
     idx = 0;
     flag=1;
 
@@ -221,7 +223,8 @@ static VALUE foreach(int argc, VALUE* argv, VALUE self) {
 
   }
   fclose(file);
-  free(line);
+  if(!backslashed)
+    free(line);
 
   return Qnil;
 }
@@ -234,4 +237,3 @@ Init_ccsv()
   rb_define_const(rb_cC, "MAX", LONG2NUM(LONG_MAX));
   rb_define_const(rb_cC, "MIN", LONG2NUM(LONG_MIN));
 }
-
